@@ -1,0 +1,98 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Recipe Index";
+}
+
+<h1>Recipes</h1>
+@model IEnumerable<RecipeDb>
+<p>
+    <a asp-action="AddRecipe">Add new Recipe</a>
+</p>
+
+<input type="search" id="searchText" class="search" placeholder="Search Recipe by name" />
+
+<table class="table" id="table1">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(test => test.Name)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (item.ImageUrl != null)
+                    {
+                        <img height="120" width="170" src="@Url.Content(item.ImageUrl)" alt="Image" />
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Recipe", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function ()
+    {
+        $(".search").on("keyup", function ()
+        {
+            var datasearch = $(this).val().toLowerCase();
+            $("#table1 tr").each(function ()
+            {
+                var stringdata = $(this).text().toLowerCase();
+                if (stringdata.indexOf(datasearch) === -1)
+                {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            });
+        });
+    });
+</script>
+@*/
+    @model RecipeHolder
+
+    @foreach(Recipe r in Model.Recipes)
+    {
+        <div>
+            <form asp-controller="Recipe" method="post" asp-action="Recipe">
+                <input type="hidden" name="id" value="@r.ID" />
+                <h3>
+                    <button type="submit">@r.Name</button>
+                </h3>
+            </form>
+        </div>
+    }
+        $("#searchText").on("keyup", function () {
+        var txtenter = $(this).val();
+        $("table tr").each(function (results) {
+            if (results !== 0) {
+                var id = $(this).find("td.nth-child(2)").text();
+                if (id.indexOf(txtenter) !== 0 && id.toLowerCase().indexOf(txtenter.toLowerCase()) < 0) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            }
+        });
+    });
+*@

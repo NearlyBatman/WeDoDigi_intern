@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<form method="post" asp-controller="Recipe" asp-action="AddRecipe">
+    <button type="submit">
+        <p>Make Recipe</p>
+    </button>
+</form>
+
+<form method="post" asp-controller="Recipe" asp-action="Index">
+    <button type="submit">
+        <p>Database testing</p>
+    </button>
+</form>
+
+<form asp-controller="Recipe" asp-action="AddRecToUser">
+    <button>
+        <p>User Testing</p>
+    </button>
+</form>
+
+<form asp-controller="Recipe" asp-action="OCRResult">
+    <button>
+        <p>OCR Testing</p>
+    </button>
+</form>
