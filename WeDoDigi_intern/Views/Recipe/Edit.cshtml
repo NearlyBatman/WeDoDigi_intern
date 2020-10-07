@@ -28,38 +28,59 @@
 
             <div class="form-group" id="ingredients">
                 <label asp-for="Ingredients" class="control-label"></label>
-
-                @foreach (var item in Model.Ingredients)
-                {
-                    <input asp-for="Ingredients" class="form-control" value="@item.ToString()" />
-                    <span asp-validation-for="Ingredients" class="text-danger"></span><br />
-                }
+                <input asp-for="Ingredients" class="form-control" value="@Model.Ingredients" />
+                <span asp-validation-for="Ingredients" class="text-danger"></span><br />
             </div>
 
             <div class="plus-minus">
                 <button onclick="addThis(event)" class="btn btn-primary">+</button>
             </div>
+
             <div class="form-group" id="steps">
                 <label asp-for="Steps" class="control-label"></label>
-                @foreach (string item in Model.Steps)
-                {
-                    @*Skal gerne laves om til Textarea: Vend tilbage senere*@
-                    <input asp-for="Steps" class="form-control" value="@item" />
-                    <span asp-validation-for="Steps" class="text-danger"></span><br />
-                }
+                @*Skal gerne laves om til Textarea: Vend tilbage senere*@
+                <input asp-for="Steps" class="form-control" value="@Model.Steps" />
+                <span asp-validation-for="Steps" class="text-danger"></span><br />
             </div>
+
             <div class="plus-minus">
                 <button onclick="addMore(event)" class="btn btn-primary">+</button>
             </div>
+
             <div class="form-group">
                 <label asp-for="ImageUrl" class="control-label"></label>
                 <input asp-for="ImageUrl" class="form-control" />
                 <span asp-validation-for="ImageUrl" class="text-danger"></span>
             </div>
 
+            <div id="Servings">
+                <label asp-for="Servings" class="control-label"></label><br />
+                <input asp-for="Servings" type="number" value="@Model.Servings"/>
+                <span asp-validation-for="Servings" class="text-danger"></span>
+            </div>
+
+            <div id="PrepTime">
+                <label asp-for="PrepTime" class="control-label"></label><br />
+                <input asp-for="PrepTime" type="number" value="@Model.PrepTime"/>
+                <span asp-validation-for="PrepTime" class="text-danger"></span>
+            </div>
+
+            <div id="CookTime">
+                <label asp-for="CookTime" class="control-label"></label><br />
+                <input asp-for="CookTime" type="number" value="@Model.CookTime"/>
+                <span asp-validation-for="CookTime" class="text-danger"></span>
+            </div>
+
+            <div id="Source">
+                <label asp-for="Source" class="control-label"></label><br />
+                <input asp-for="Source" type="number" value="@Model.Source"/>
+                <span asp-validation-for="Source" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Save Recipe" name="save" class="btn btn-primary" />
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Save as new" name="save" class="btn btn-primary" />
             </div>

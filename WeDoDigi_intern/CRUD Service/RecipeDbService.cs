@@ -25,9 +25,26 @@ namespace WeDoDigi_intern.CRUD_Service
             return recipes.Find(rec => true).ToList();
         }
 
+        public List<RecipeDb> GetByTag(List<string> tagIds)
+        {
+            List<RecipeDb> kek = new List<RecipeDb>();
+
+            foreach(string s in tagIds)
+            {
+                kek.Add(recipes.Find(rec => rec.Id == s).FirstOrDefault());
+            }
+            return kek;
+        }
+
         public RecipeDb Get(string id)
         {
             return recipes.Find(rec => rec.Id == id).FirstOrDefault();
+        }
+
+        public List<string> GetTags(string id)
+        {
+            var rec = recipes.Find(rec => rec.Id == id).FirstOrDefault();
+            return rec.Tags;
         }
 
         public RecipeDb Create(RecipeDb recDb)
@@ -35,6 +52,7 @@ namespace WeDoDigi_intern.CRUD_Service
             recipes.InsertOne(recDb);
             return recDb;
         }
+
         public void Update(string id, RecipeDb recDbIn)
         {
             recipes.ReplaceOne(rec => rec.Id == id, recDbIn);

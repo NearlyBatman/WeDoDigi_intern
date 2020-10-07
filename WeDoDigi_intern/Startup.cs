@@ -28,9 +28,9 @@ namespace WeDoDigi_intern
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddMvc();
-            services.AddSingleton<RecipeHolder>(new RecipeHolder());
             services.AddScoped<RecipeDbService>();
             services.AddScoped<TestCrud>();
+            services.AddScoped<TagCrud>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +59,7 @@ namespace WeDoDigi_intern
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
                 endpoints.MapRazorPages();
             });
         }

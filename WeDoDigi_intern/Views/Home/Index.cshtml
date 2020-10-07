@@ -11,15 +11,21 @@
     </button>
 </form>
 
+<form asp-controller="GoogleSearch" asp-action="SearchPosts">
+    <button>
+        <p>Google Test</p>
+    </button>
+</form>
+
 <form method="post" asp-controller="Recipe" asp-action="Index">
     <button type="submit">
         <p>Database testing</p>
     </button>
 </form>
 
-<form asp-controller="Recipe" asp-action="AddRecToUser">
+<form asp-controller="Recipe" asp-action="TagTest">
     <button>
-        <p>User Testing</p>
+        <p>Tag Testing</p>
     </button>
 </form>
 
@@ -27,4 +33,19 @@
     <button>
         <p>OCR Testing</p>
     </button>
+</form>
+
+<form asp-controller="Recipe" asp-action="Sorting">
+    <button>
+        <p>Sorting test</p>
+    </button>
+</form>
+
+<form asp-controller="OCR" asp-action="Index" method="post" enctype="multipart/form-data">
+    @*
+        <button>OCR Testing 2.0</button>
+    *@
+    <label for="file">Upload Image</label>
+    <input type="file" name="file" id="file" />
+    <input type="submit" value="Upload" />
 </form>

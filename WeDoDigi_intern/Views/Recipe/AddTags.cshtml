@@ -1,0 +1,122 @@
+﻿@model TagHolder
+@{
+    ViewData["Title"] = "AddTags";
+    Layout = null;
+}
+
+<div>
+    @foreach (string s in Model.tagHolder)
+    {
+        <div class="justify-content-center">
+            <div class="onoffswitch">
+                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="@s" tabindex="0">
+                <label class="onoffswitch-label" for="@s">
+                    <span class="onoffswitch-inner"></span>
+                    <span class="onoffswitch-switch"></span>
+                </label>
+            </div>
+            <div>
+                <p>@s</p>
+            </div>
+        </div>
+    }
+    <input type="button" value="Select" onclick="SetTags(event)" />
+</div>
+<script>
+    function SetTags(event) {
+        // Lav det hele i viewet og vis det i stedet der
+        // brug en metode på modellen til at få fat i samtlige tags på
+        // vis og gem tag viduet med html og js i stedet for MVC
+        event.PreventDefault();
+        var kek = document.querySelector('.onoffswitch-checkbox:checked').id;
+        $.ajax({
+            type: "POST"
+        })
+
+    }
+
+    function test() {
+    }
+</script>
+
+<style>
+    .onoffswitch {
+        position: relative;
+        width: 100px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+
+    .onoffswitch-checkbox {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .onoffswitch-label {
+        display: block;
+        overflow: hidden;
+        cursor: pointer;
+        border: 2px solid #999999;
+        border-radius: 50px;
+    }
+
+    .onoffswitch-inner {
+        display: block;
+        width: 200%;
+        margin-left: -100%;
+        transition: margin 0.3s ease-in 0s;
+    }
+
+        .onoffswitch-inner:before, .onoffswitch-inner:after {
+            display: block;
+            float: left;
+            width: 50%;
+            height: 25px;
+            padding: 0;
+            line-height: 25px;
+            font-size: 14px;
+            color: white;
+            font-family: Trebuchet, Arial, sans-serif;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .onoffswitch-inner:before {
+            content: "ADDED";
+            padding-left: 25px;
+            background-color: #00BFFF;
+            color: #FFFFFF;
+        }
+
+        .onoffswitch-inner:after {
+            content: "";
+            padding-right: 25px;
+            background-color: #EEEEEE;
+            color: #999999;
+            text-align: right;
+        }
+
+    .onoffswitch-switch {
+        display: block;
+        width: 25px;
+        margin: 0px;
+        background: #FFFFFF;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 71px;
+        border: 2px solid #999999;
+        border-radius: 50px;
+        transition: all 0.3s ease-in 0s;
+    }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+        margin-left: 0;
+    }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+        right: 0px;
+    }
+</style>

@@ -31,29 +31,51 @@
         @Html.DisplayFor(model => model.Description)
     </dd>
 </dl>
+
 <h5>
     Ingredients
 </h5>
-<ul style="list-style-type:none;">
-    @foreach (var item in Model.Ingredients)
-    {
-        <li class="col-sm-10">
-            @item
-        </li>
-    }
-</ul>
+
+<div>
+    @Html.DisplayFor(model => model.Ingredients)
+</div>
+
 <h5>
     Steps
 </h5>
-<ol>
-    @foreach (var item in Model.Steps)
-    {
 
+<div>
+    @Html.DisplayFor(model => model.Steps)
+</div>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Servings)
+        </dt>
         <dd class="col-sm-10">
-            @item
+            @Html.DisplayFor(model => model.Servings)
         </dd>
-    }
-</ol>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PrepTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PrepTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CookTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CookTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Source)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Source)
+        </dd>
+    </dl>
+</div>
 
 <div>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |

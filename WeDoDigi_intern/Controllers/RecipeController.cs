@@ -20,17 +20,19 @@ namespace WeDoDigi_intern.Controllers
         // private RecipeHolder recipes
         private readonly RecipeDbService rDbService;
         private readonly TestCrud tCrud;
+        private readonly TagCrud tagService;
 
-        public RecipeController(/*RecipeHolder rHolder*/ RecipeDbService recipeDb, TestCrud test)
+        public RecipeController(RecipeDbService recipeDb, TestCrud test, TagCrud tag)
         {
             this.rDbService = recipeDb;
             this.tCrud = test;
+            this.tagService = tag;
             //recipes = rHolder;
         }
 
         public IActionResult Index()
         {
-            return View(tCrud.GetRecipes());
+            return View(rDbService.Get());
         }
 
         [HttpPost]
@@ -38,8 +40,46 @@ namespace WeDoDigi_intern.Controllers
         {
             return View();
         }
-        
 
+        public IActionResult GetTags(string id)
+        {
+            return View();
+        }
+
+        public IActionResult Sorting()
+        {
+            return View(tagService.GetAllTagsObjects());
+        }
+
+        public IActionResult SortingResult(string id)
+        {
+            var getTagId = tagService.GetTags(id);
+            var recFound = rDbService.GetByTag(getTagId);
+            return View(recFound);
+        }
+
+        [HttpPost]
+        public IActionResult TagTest()
+        {
+
+            return View("~/Views/Home/Index.cshtml");
+        }
+
+        public IActionResult AddTags(string recId, int id = 0)
+        {
+            TagHolder t = new TagHolder();
+            if (id == 0)
+            {
+                t.tagHolder = tagService.GetTags();
+                return View(t);
+            }
+            else
+            {
+                t.tagHolder = tagService.GetTags();
+                t.tagMarkedHolder = tagService.GetNameTags(rDbService.GetTags(recId));
+                return View(t);
+            }
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -51,6 +91,7 @@ namespace WeDoDigi_intern.Controllers
                 rDbService.Create(recDb);
                 return RedirectToAction(nameof(Index));
             }
+
             return View("AddRecipe", recDb);
         }
 
@@ -104,7 +145,9 @@ namespace WeDoDigi_intern.Controllers
             {
                 return NotFound();
             }
-            var recipe = tCrud.GetRecipe( id);
+
+            var recipe = rDbService.Get(id);
+
             if (recipe == null)
             {
                 return NotFound();
@@ -128,6 +171,7 @@ namespace WeDoDigi_intern.Controllers
 
             return View(recipe);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult EditResult(string id, RecipeDb rDb, string save)
@@ -138,11 +182,12 @@ namespace WeDoDigi_intern.Controllers
             }
             if (ModelState.IsValid)
             {
-                switch(save)
+                switch (save)
                 {
                     case "Save Recipe":
                         tCrud.Update(rDb, id);
-                    break;
+                        break;
+
                     case "Save as new":
                         rDb.Id = GetRandomHexNumber(24);
                         tCrud.AddRecipe(rDb);
@@ -157,13 +202,6 @@ namespace WeDoDigi_intern.Controllers
             }
         }
 
-        public PartialViewResult Search(string query)
-        {
-
-            var result = rDbService.Get();
-
-            return PartialView("_Results", result);
-        }
         private static string GetRandomHexNumber(int hex)
         {
             Random random = new Random();

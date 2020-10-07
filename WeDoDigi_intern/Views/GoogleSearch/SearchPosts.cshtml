@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewData["Title"] = "SearchPosts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Search Posts</h1>
+
+
+
+<div class="gcse-search"></div>
+
+<script async src="https://cse.google.com/cse.js?cx=e7122c7b9d5604474"></script>
+
+<gcse:searchresults-only></gcse:searchresults-only>
+
+@*
+
+        (function () {
+        var cx = 'e7122c7b9d5604474';
+        var gcse = document.createElement('script');
+        gcse.type = 'text/javascript';
+        gcse.async = true;
+        gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(gcse, s);
+    })();
+
+*@

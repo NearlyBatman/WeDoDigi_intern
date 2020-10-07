@@ -1,0 +1,325 @@
+﻿@{
+    ViewData["Title"] = "OCRTesting";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.9/js/jquery.Jcrop.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.15/css/jquery.Jcrop.css">
+
+<h1>OCR Testing</h1>
+
+<h6 id="marker">Mark up the title</h6>
+
+@using (Html.BeginForm("AddImage", "OCR", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data", id = "imageForm" }))
+{
+    <input type="text" value="Mark Title" readonly />
+    <div class="form-group">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <div>
+                            <img id="imgEmpPhoto" src="@ViewBag.foo" />
+                        </div>
+                    </td>
+                    <td>
+                        <input type="hidden" name="imageData" id="imageData" />
+                        <canvas id="canvas" height="5" width="5" style="vertical-align:top;"></canvas>
+                    </td>
+                    <td>
+                        <a href="#" id="hlcropImage" style="vertical-align:top;">Crop Image</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <input type="hidden" value="0" id="countUp" />
+    <p>
+        <img id="imgCropped" src="#" style="display:none;">
+    </p>
+    <input type="hidden" name="avatarCropped" id="avatarCropped">
+    <input type="button" class="btn btn-primary" id="submitImage" value="Noget" />
+}
+
+
+@*
+    <div class="form-group">
+        <input type="file" id="flPhoto" name="upload">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <div>
+                            <img id="imgEmpPhoto" src="~/images/oatmeal.jpg">
+                        </div>
+                    </td>
+                    <td>
+                        <canvas id="canvas" height="5" width="5" style="vertical-align:top;"></canvas>
+                    </td>
+                    <td>
+                        <a href="#" id="hlcropImage" style="vertical-align:top;">Crop Image</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <p>
+        <img id="imgCropped" src="#" style="display:none;">
+    </p>
+    <input type="hidden" name="avatarCropped" id="avatarCropped">
+*@
+
+
+<script>
+    @*
+
+
+            $("#testSubmit").on("click", function (e) {
+        e.preventDefault();
+        var inputFileImage = document.getElementById("imgCropped");
+        var file = inputFileImage.files[0];
+        var formData = new FormData();
+        data.append('file', file)
+
+        $ajax({
+            type: "Post",
+            url: '@Url.Action("AddImage", "OCR")',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (result) { alert(result); }
+        });
+    })
+            $("#testImage").click(function () {
+        image = document.getElementById("canvas").toDataURL();
+        var k = document.createElement("p");
+        var kek = '<img id="imEmpPhoto" src="' + image + '"/>';
+        k.innerHTML += kek;
+        document.getElementById('testMeh').appendChild(k);
+    })
+        *@
+
+
+    var image;
+
+    $("#submitImage").click(function () {
+        image = document.getElementById("canvas").toDataURL("image/png");
+        image = image.replace('data:image/png;base64,', '');
+
+        var cHold = document.getElementById("countUp").value;
+        var count = parseInt(cHold, 10) + 1;
+        $("#countUp").val(count);
+
+        var complexObjects = {
+            imageString: image,
+            intCounter: count
+        };
+        var complexObject = {};
+        complexObject.imageString = image;
+        complexObject.intCounter = count;
+
+        var obj = { cHolder: complexObjects };
+        var kek = { imageData: JSON.stringify(image) }
+
+        $.ajax({
+            type: 'POST',
+            url: 'OCR/AddImage',
+            data: kek,
+            success: function () {
+            },
+            error: function () {
+
+            }
+        })
+    })
+
+    @*
+
+        var formData = new FormData();
+        var file = document.getElementById("canvas").files[0];
+        formData.append('cropFile', file);
+
+    '{"imageData" : "' + image + '"}'
+        *@
+
+    function uploadFileAjax(event) {
+
+        event.preventDefault();
+        var inputFileImage = document.getElementById("imgCropped");
+        var file = inputFileImage.files[0];
+        var data = new FormData();
+        data.append('file', file)
+
+        $ajax({
+            type: "Post",
+            url: '@Url.Action("AddImage", "OCR")',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (result) { alert(result); }
+        });
+    };
+
+
+
+
+    var imageCropWidth = 0;
+    var imageCropHeight = 0;
+    var cropPointX = 0;
+    var cropPointY = 0;
+    var jcropApi;
+
+    $(document).ready(function ($) {
+        $('#imgEmpPhoto').Jcrop({
+            onChange: setCoordsAndImgSize,
+            aspectRatio: 0, // 1 means will be same for height and weight
+            onSelect: setCoordsAndImgSize
+        }, function () { jcropApi = this });
+    });
+
+    $("#hlcropImage").on("click", function (e) {
+
+        e.preventDefault();
+        cropImage();
+    });
+
+
+
+    function initCrop() {
+        $('#imgEmpPhoto').Jcrop({
+            onChange: setCoordsAndImgSize,
+            aspectRatio: 0, // 1 means will be same for height and weight
+            onSelect: setCoordsAndImgSize
+        }, function () { jcropApi = this });
+    }
+
+    function setCoordsAndImgSize(e) {
+
+        imageCropWidth = e.w;
+        imageCropHeight = e.h;
+
+        cropPointX = e.x;
+        cropPointY = e.y;
+    }
+
+    function cropImage() {
+
+        if (imageCropWidth == 0 && imageCropHeight == 0) {
+            alert("Please select crop area.");
+            return;
+        }
+
+        var img = $("#imgEmpPhoto").attr("src");
+
+        /*Show cropped image*/
+        showCroppedImage();
+    }
+
+    function showCroppedImage() {
+        var x1 = cropPointX;
+        var y1 = cropPointY;
+
+        var width = imageCropWidth;
+        var height = imageCropHeight;
+        var canvas = $("#canvas")[0];
+        var context = canvas.getContext('2d');
+        var img = new Image();
+        img.onload = function () {
+            canvas.height = height;
+            canvas.width = width;
+            context.drawImage(img, x1, y1, width, height, 0, 0, width, height);
+            $('#avatarCropped').val(canvas.toDataURL());
+        };
+        img.src = $('#imgEmpPhoto').attr("src");
+    }
+
+    function readFile(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            /*Destroy jcrop initialization other wise it will hold it previous image in img tag*/
+            if (jcropApi != null) {
+                jcropApi.destroy();
+            }
+            reader.onload = function (e) {
+                $('#imgEmpPhoto').attr('src', "");
+                var img = $('#imgEmpPhoto').attr('src', e.target.result);
+
+            /*Current uploaded image size*/
+                /*
+                var width = img[0].height;
+                var height = img[0].width;
+                $("#lblWidth").text(width + "px");
+                $("#lblHeight").text(height + "px");
+                */
+                //InitCrop must call here otherwise it will not work
+                initCrop();
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $('#flPhoto').change(function () {
+        readFile(this);
+        initCrop();
+    });
+
+
+</script>
+
+
+
+@*
+
+        function showCoordinate() {
+        $("#lblWidth").text(imageCropWidth + "px");
+        $("#lblHeight").text(imageCropHeight + "px");
+    }
+
+    <input type="file" name="nationalCard" id="imageHolder">
+
+            $(function () {
+            $("#btnPost").click(function () {
+
+            })
+        })
+
+
+    function readFile(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                /*Destroy jcrop initialization other wise it will hold it previous image in img tag*/
+                if (jcropApi != null) {
+                    jcropApi.destroy();
+                }
+                reader.onload = function (e) {
+                    $('#imgEmpPhoto').attr('src', "");
+                    var img = $('#imgEmpPhoto').attr('src', e.target.result);
+
+                    /*Current uploaded image size*/
+                    var width = img[0].height;
+                    var height = img[0].width;
+                    $("#lblWidth").text(width + "px");
+                    $("#lblHeight").text(height + "px");
+
+                    //InitCrop must call here otherwise it will not work
+                    initCrop();
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $('#flPhoto').change(function () {
+            readFile(this);
+            //initCrop();
+        });
+
+*@
