@@ -21,7 +21,7 @@ namespace WeDoDigi_intern.Controllers
         private readonly RecipeDbService rDbService;
         private readonly TestCrud tCrud;
         private readonly TagCrud tagService;
-
+        // Får adgang til de forskellige CRUD services
         public RecipeController(RecipeDbService recipeDb, TestCrud test, TagCrud tag)
         {
             this.rDbService = recipeDb;
@@ -29,42 +29,42 @@ namespace WeDoDigi_intern.Controllers
             this.tagService = tag;
             //recipes = rHolder;
         }
-
+        // Returner viewet med alle opskrifterne
         public IActionResult Index()
         {
             return View(rDbService.Get());
         }
-
+        // View for manuel opskrift
         [HttpPost]
         public IActionResult AddRecipe()
         {
             return View();
         }
-
+        // Ikke udført
         public IActionResult GetTags(string id)
         {
             return View();
         }
-
+        // View med alle tags
         public IActionResult Sorting()
         {
             return View(tagService.GetAllTagsObjects());
         }
-
+        // Returner view med opskrifter der findes i tagget
         public IActionResult SortingResult(string id)
         {
             var getTagId = tagService.GetTags(id);
             var recFound = rDbService.GetByTag(getTagId);
             return View(recFound);
         }
-
+        // Kan jeg ikke huske
         [HttpPost]
         public IActionResult TagTest()
         {
 
             return View("~/Views/Home/Index.cshtml");
         }
-
+        // Heller ikke den her
         public IActionResult AddTags(string recId, int id = 0)
         {
             TagHolder t = new TagHolder();
@@ -80,7 +80,8 @@ namespace WeDoDigi_intern.Controllers
                 return View(t);
             }
         }
-
+        // Når en opskrift er lavet tjekker den modellen 
+        // Tager fat i opskrift Crud Service og sættter den ind
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult NewRecipe(RecipeDb recDb)
@@ -94,7 +95,7 @@ namespace WeDoDigi_intern.Controllers
 
             return View("AddRecipe", recDb);
         }
-
+        // En OCR test som egentlig godt kan slettes
         public IActionResult OCRResult(IFormFile file)
         {
             var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase);
@@ -124,7 +125,9 @@ namespace WeDoDigi_intern.Controllers
                 }
             }
         }
-
+        // Objekterne skal egentlig gemmes på en bruger, lige nu bliver de generelt gemt i en databse
+        // Ikke på en bruger database
+        // RandomHex bliver brugt for at skabe et valid MongoDb ID
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AddRecToUser(RecipeDb rDb)
@@ -138,7 +141,7 @@ namespace WeDoDigi_intern.Controllers
 
             return View("AddRecipe", rDb);
         }
-
+        // Finder og returner opskriften til viewet
         public IActionResult Recipe(string id)
         {
             if (id == null)
@@ -155,7 +158,8 @@ namespace WeDoDigi_intern.Controllers
 
             return View(recipe);
         }
-
+        // Hvis brug for redigering
+        // Returner opskriften til et View med mulighed for at rette værdier
         public IActionResult Edit(string id)
         {
             if (id == null)
@@ -163,7 +167,7 @@ namespace WeDoDigi_intern.Controllers
                 return NotFound();
             }
 
-            var recipe = tCrud.GetRecipe(id); ;
+            var recipe = rDbService.Get(id); ;
             if (recipe == null)
             {
                 return NotFound();
@@ -171,7 +175,7 @@ namespace WeDoDigi_intern.Controllers
 
             return View(recipe);
         }
-
+        // Gemmer opskriften efter redigering
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult EditResult(string id, RecipeDb rDb, string save)
@@ -201,7 +205,7 @@ namespace WeDoDigi_intern.Controllers
                 return View(rDb);
             }
         }
-
+        // Laver et Hex nummer til et MongoDb object
         private static string GetRandomHexNumber(int hex)
         {
             Random random = new Random();

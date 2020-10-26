@@ -12,13 +12,14 @@ namespace WeDoDigi_intern.CRUD_Service
     public class TagCrud
     {
         private readonly IMongoCollection<TagDb> tags;
+        // Forbindelse til den specifikke database
         public TagCrud(IConfiguration config)
         {
             MongoClient client = new MongoClient(config.GetConnectionString("RecipeDb"));
             IMongoDatabase database = client.GetDatabase("RecipeDb");
             tags = database.GetCollection<TagDb>("TagDb");
         }
-
+        // Får alle tags
         public List<TagDb> GetAllTagsObjects()
         {
             return tags.Find(tag => true).ToList();

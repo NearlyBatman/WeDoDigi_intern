@@ -57,18 +57,12 @@ namespace WeDoDigi_intern.Models
         [BsonElement("Source")]
         public string Source { get; set; }
 
-        public List<string> GetTags()
+        public RecipeDb(string name, string description, string ingredients, string steps)
         {
-            List<string> kek = new List<string>();
-            MongoClient client = new MongoClient("mongodb + srv://new-user__31:123321@cluster0.ou0ly.mongodb.net/Recipedb?retryWrites=true&w=majority");
-            IMongoDatabase database = client.GetDatabase("RecipeDb");
-            IMongoCollection<TagDb> tags = database.GetCollection<TagDb>("TagDb");
-            List<TagDb> meh = tags.Find(tag => true).ToList();
-            foreach(TagDb s in meh)
-            {
-                kek.Add(s.tagName);
-            }
-            return kek;
+            this.Name = name;
+            this.Description = description;
+            this.Ingredients = ingredients;
+            this.Steps = steps;
         }
     }
 }

@@ -1,19 +1,19 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "OCRTesting";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.9/js/jquery.Jcrop.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.15/css/jquery.Jcrop.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/js/jquery.Jcrop.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.12/css/jquery.Jcrop.css">
 
 <h1>OCR Testing</h1>
 
-<h6 id="marker">Mark up the title</h6>
+<h6 id="marker">Mark up the Title</h6>
 
-@using (Html.BeginForm("AddImage", "OCR", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data", id = "imageForm" }))
+@using (Html.BeginForm("AddOCRToRec", "OCR", FormMethod.Post))
 {
-    <input type="text" value="Mark Title" readonly />
     <div class="form-group">
         <table>
             <tbody>
@@ -41,8 +41,14 @@
     </p>
     <input type="hidden" name="avatarCropped" id="avatarCropped">
     <input type="button" class="btn btn-primary" id="submitImage" value="Noget" />
+    <div id="submitId">
+        <input type="submit" value="Submit" disabled />
+    </div>
+  
 }
+<p id="testThis">
 
+</p>
 
 @*
     <div class="form-group">
@@ -108,29 +114,32 @@
     $("#submitImage").click(function () {
         image = document.getElementById("canvas").toDataURL("image/png");
         image = image.replace('data:image/png;base64,', '');
+        image = image.split(' ').join('+')
 
         var cHold = document.getElementById("countUp").value;
         var count = parseInt(cHold, 10) + 1;
         $("#countUp").val(count);
 
-        var complexObjects = {
+        var complexObject = {
             imageString: image,
             intCounter: count
         };
-        var complexObject = {};
-        complexObject.imageString = image;
-        complexObject.intCounter = count;
 
-        var obj = { cHolder: complexObjects };
-        var kek = { imageData: JSON.stringify(image) }
+        var obj = JSON.stringify(complexObject);
+        //document.getElementById('testThis').innerHTML += '<img src="data:image/png;base64,' + response.responseText + '" />';
 
         $.ajax({
             type: 'POST',
-            url: 'OCR/AddImage',
-            data: kek,
-            success: function () {
+            url: 'OCR/TestImage',
+            data: { imgString: JSON.stringify(complexObject)},
+            cache: false,
+            success: function (response) {
+                document.getElementById('marker').innerHTML = response.responseText;
+                if (count == 4) {
+                    document.getElementById('submitId').innerHTML = '<input type="submit" value="Submit" />';
+                }
             },
-            error: function () {
+            error: function (response) {
 
             }
         })

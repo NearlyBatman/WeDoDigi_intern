@@ -9,5 +9,18 @@ namespace WeDoDigi_intern.Models
     {
         public string imageString { get; set; }
         public int intCounter { get; set; }
+
+        public string SetImgString(int counter, string imgString)
+        {
+            string message = "Please try again";
+
+            switch (counter)
+            {
+                case 1:
+                    break;
+            }
+
+            return message;
+        }
     }
 }

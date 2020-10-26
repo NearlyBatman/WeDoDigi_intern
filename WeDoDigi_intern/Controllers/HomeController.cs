@@ -18,11 +18,12 @@ namespace WeDoDigi_intern.Controllers
             _logger = logger;
         }
 
+        // Start View
         public IActionResult Index()
         {
             return View();
         }
-
+        
         public IActionResult Privacy()
         {
             return View();

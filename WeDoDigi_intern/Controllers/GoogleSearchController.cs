@@ -8,6 +8,7 @@ namespace WeDoDigi_intern.Controllers
 {
     public class GoogleSearchController : Controller
     {
+        // Returner viewet med Google search funktionaliteten
         public IActionResult SearchPosts()
         {
             return View();
