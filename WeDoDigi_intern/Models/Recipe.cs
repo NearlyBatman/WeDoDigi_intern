@@ -7,6 +7,7 @@ namespace WeDoDigi_intern.Models
 {
     public class Recipe
     {
+        // Startudkast til opskriften
         public string ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

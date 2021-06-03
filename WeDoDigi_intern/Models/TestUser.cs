@@ -10,6 +10,8 @@ namespace WeDoDigi_intern.Models
 {
     public class TestUser
     {
+        // Forsøg på implementering af bruger system
+        // Ikke rigtig implementeret endnu pga. mangel på understøttelse i MongoDB
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }

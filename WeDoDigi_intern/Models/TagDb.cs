@@ -10,6 +10,7 @@ namespace WeDoDigi_intern.Models
 {
     public class TagDb
     {
+        // Tag element der gemmes i MongoDB
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string id { get; set; }
@@ -18,6 +19,7 @@ namespace WeDoDigi_intern.Models
         [Required]
         public string tagName { get; set; }
 
+        // Er listen over ID's på de opskrifter der indholder tagget
         [BsonElement("IdList")]
         public List<string> idList = new List<string>();
 

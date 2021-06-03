@@ -13,6 +13,7 @@ namespace WeDoDigi_intern.Models
 {
     public class RecipeDb
     {
+ 
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
@@ -35,7 +36,6 @@ namespace WeDoDigi_intern.Models
         [BsonElement("ImageUrl")]
         [Display(Name = "Photo")]
         [DataType(DataType.ImageUrl)]
-        [Required]
         public string ImageUrl { get; set; }
 
         [BsonElement("Servings")]

@@ -40,7 +40,7 @@
         <img id="imgCropped" src="#" style="display:none;">
     </p>
     <input type="hidden" name="avatarCropped" id="avatarCropped">
-    <input type="button" class="btn btn-primary" id="submitImage" value="Noget" />
+    <input type="button" class="btn btn-primary" id="submitImage" value="Send udklip" />
     <div id="submitId">
         <input type="submit" value="Submit" disabled />
     </div>
@@ -125,12 +125,12 @@
             intCounter: count
         };
 
-        var obj = JSON.stringify(complexObject);
+        
         //document.getElementById('testThis').innerHTML += '<img src="data:image/png;base64,' + response.responseText + '" />';
 
         $.ajax({
             type: 'POST',
-            url: 'OCR/TestImage',
+            url: 'OCR/AddImage',
             data: { imgString: JSON.stringify(complexObject)},
             cache: false,
             success: function (response) {

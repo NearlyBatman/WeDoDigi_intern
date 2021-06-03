@@ -40,30 +40,26 @@ namespace WeDoDigi_intern.Controllers
         [HttpPost]
         public JsonResult AddImage(string imgString)
         {
-            //Tager imod en base 64 string i json formaet og laver den til en model
-            var res = Newtonsoft.Json.JsonConvert.DeserializeObject<CountHolder>(imgString);
-            // Messeage er beskeden vi sender til viewet
+            CountHolder res = Newtonsoft.Json.JsonConvert.DeserializeObject<CountHolder>(imgString);
+
             string message = "Please try again";
-            // Fjerne unødvendige tegn i base64 stringen
+
             var data = Regex.Replace(res.imageString, " ", "+");
-            // Omdanner fra base64 til byte array
+
             var bString = Convert.FromBase64String(res.imageString);
-            // Laver arrayet til en stream
-            var testing = new MemoryStream(bString);
-            // Finder tesseract dataen
+
+            var mStream = new MemoryStream(bString);
+
             var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase);
             path = Path.Combine(path, "tessdata");
             path = path.Replace("file:\\", "");
-            // Bruger dataen med dansk
+
             using (var engine = new TesseractEngine(path, "dan", EngineMode.Default))
             {
-                // Laver streamen til et Bitmap
-                using (var image = new Bitmap(testing))
+                using (var image = new Bitmap(mStream))
                 {
-                    // Konvertere Bitmappet til Pix for at Tesseract kan læse det
                     using (var pix = PixConverter.ToPix(image))
                     {
-                        // Giver et resultat på hvad der står på det markeret billede
                         using (var page = engine.Process(pix))
                         {
                             data = page.GetText();
@@ -76,7 +72,6 @@ namespace WeDoDigi_intern.Controllers
             // Switch for at se hvor vi er nået i rækken
             switch (res.intCounter)
             {
-                // Gemmer dataerne forksellige steder alt efter hvad markeringen skulle være
                 case 1:
                     TempData["Title"] = data as string;
                     message = "Mark up description";
@@ -99,7 +94,6 @@ namespace WeDoDigi_intern.Controllers
                 case int n when (n >= 5 || n <= 0):
                     break;
             }
-            // Returnere Json
             return Json(new { success = true, responseText = message }) ;
         }
 
@@ -107,8 +101,11 @@ namespace WeDoDigi_intern.Controllers
         public IActionResult AddOCRToRec()
         {
             // Laver et RecipeDb objekt med de værdier fundet igennem OCR
-            RecipeDb recipe = new RecipeDb(TempData["Title"] as string, TempData["Description"] as string, TempData["Ingredients"] as string, TempData["Steps"] as string);
-
+            RecipeDb recipe = new RecipeDb(TempData["Title"] as string,
+                TempData["Description"] as string,
+                TempData["Ingredients"] as string,
+                TempData["Steps"] as string);
+            // Sender os til viewet for at lave recipes med objektet
             return View("../Recipe/Addrecipe", recipe);
         }
     }
